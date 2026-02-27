@@ -14,7 +14,7 @@ jobs:
     prettier:
         # Check if prettier needs to be applied
         runs-on: ubuntu-latest
-        name: prettier-check
+        name: Prettier
         steps:
             - name: Checkout repo and submodules
               uses: actions/checkout@v4
@@ -34,7 +34,7 @@ jobs:
 
     eslint:
         runs-on: ubuntu-latest
-        name: eslint-check
+        name: ESlint
         steps:
             - name: Checkout repo and submodules
               uses: actions/checkout@v4
@@ -45,6 +45,9 @@ jobs:
               uses: actions/setup-node@v4
               with:
                   node-version: '18'
+            
+            - name: Checkout frontend
+              run: cd ./frontend
 
             - name: Install dependencies
               run: npm ci
