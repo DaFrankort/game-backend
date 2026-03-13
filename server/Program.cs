@@ -1,6 +1,7 @@
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<Server.Services.LobbyService>();
+builder.Services.AddSingleton<Server.Services.UserService>();
 builder.Services.AddControllers();
 
 var app = builder.Build();
