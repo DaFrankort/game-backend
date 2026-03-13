@@ -4,7 +4,7 @@ on:
     pull_request:
       branches: [main]
       paths:
-        - 'frontend/**'
+        - 'client/**'
     workflow_dispatch:
 
 permissions:
@@ -18,19 +18,19 @@ jobs:
         steps:
             - name: Checkout repo and submodules
               uses: actions/checkout@v4
-              with:
-                  submodules: true
 
             - name: Set up Node.js
               uses: actions/setup-node@v4
               with:
-                  node-version: '18'
+                  node-version: '24'
 
             - name: Install dependencies
-              run: npm ci
+              working-directory: ./client
+              run: npm install
 
             - name: Run prettier
-              run: npx prettier package.json "./frontend/**/*.ts" -c
+              working-directory: ./client
+              run: npx prettier package.json "./src/**/*.ts" -c
 
     eslint:
         runs-on: ubuntu-latest
@@ -38,19 +38,16 @@ jobs:
         steps:
             - name: Checkout repo and submodules
               uses: actions/checkout@v4
-              with:
-                  submodules: true
 
             - name: Set up Node.js
               uses: actions/setup-node@v4
               with:
-                  node-version: '18'
-            
-            - name: Checkout frontend
-              run: cd ./frontend
+                  node-version: '24'
 
             - name: Install dependencies
-              run: npm ci
+              working-directory: ./client
+              run: npm install
 
             - name: Run eslint
+              working-directory: ./client
               run: npm run lint
