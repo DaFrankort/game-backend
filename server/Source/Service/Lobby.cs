@@ -1,5 +1,6 @@
 namespace Server.Services;
 
+using Server.Exceptions;
 using Server.Models;
 
 public class LobbyService(UserService userService)
@@ -18,32 +19,27 @@ public class LobbyService(UserService userService)
         return lobby;
     }
 
-    public bool AddUser(int lobbyId, int userId)
+    public void AddUser(int lobbyId, int userId)
     {
-        Lobby? lobby = GetById(lobbyId);
-        User? user = _userService.GetById(userId);
-        if (lobby == null || user == null)
-            return false;
+        Lobby? lobby = GetById(lobbyId) ?? throw new LobbyNotFoundException(lobbyId);
+        User? user = _userService.GetById(userId) ?? throw new UserNotFoundException(userId);
 
         if (user.InLobby())
-            return false;
+            throw new UserInLobbyException(userId);
         user.LobbyId = lobbyId;
 
         lobby.Users.Add(user);
-        return true;
     }
 
-    public bool RemoveUser(int lobbyId, int userId)
+    public void RemoveUser(int lobbyId, int userId)
     {
-        Lobby? lobby = GetById(lobbyId);
-        User? user = _userService.GetById(userId);
-        if (lobby == null || user == null)
-            return false;
+        Lobby? lobby = GetById(lobbyId) ?? throw new LobbyNotFoundException(lobbyId);
+        User? user = _userService.GetById(userId) ?? throw new UserNotFoundException(userId);
 
         if (!user.InLobby())
-            return false;
+            throw new UserNotInLobbyException(userId);
         user.LobbyId = null;
 
-        return lobby.Users.RemoveAll(u => u.Id == userId) > 0;
+        lobby.Users.RemoveAll(u => u.Id == userId);
     }
 }

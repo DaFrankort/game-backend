@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Server.DTO;
+using Server.Exceptions;
 using Server.Models;
 using Server.Services;
 
@@ -44,10 +45,7 @@ namespace Server.Controllers
         [HttpPost("join")]
         public IActionResult Join([FromBody] JoinLobbyRequestDto dto)
         {
-            bool success = _service.AddUser(dto.LobbyId, dto.UserId);
-            if (!success)
-                return BadRequest("Could not join lobby.");
-
+            _service.AddUser(dto.LobbyId, dto.UserId);
             Lobby lobby = _service.GetById(dto.LobbyId)!;
             return Ok(lobby);
         }
@@ -55,10 +53,7 @@ namespace Server.Controllers
         [HttpPost("leave")]
         public IActionResult Leave([FromBody] JoinLobbyRequestDto dto)
         {
-            bool success = _service.RemoveUser(dto.LobbyId, dto.UserId);
-            if (!success)
-                return BadRequest("Unknown lobby");
-
+            _service.RemoveUser(dto.LobbyId, dto.UserId);
             Lobby lobby = _service.GetById(dto.LobbyId)!;
             return Ok(lobby);
         }
