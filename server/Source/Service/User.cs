@@ -10,10 +10,16 @@ public class UserService
 
     public User? GetById(int id) => _users.FirstOrDefault(l => l.Id == id);
 
-    public User Create(User user)
+    public User Create(string Name)
     {
-        user.Id = _users.Count > 0 ? _users.Max(l => l.Id) + 1 : 1;
+        string token = GenerateToken();
+        User user = new(Name, token) { Id = _users.Count > 0 ? _users.Max(l => l.Id) + 1 : 1 };
         _users.Add(user);
         return user;
+    }
+
+    private static string GenerateToken()
+    {
+        return Convert.ToBase64String(Guid.NewGuid().ToByteArray());
     }
 }

@@ -16,16 +16,23 @@ namespace Server.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            User? lobby = _service.GetById(id);
-            return lobby is not null ? Ok(lobby) : NotFound();
+            User? user = _service.GetById(id);
+            return user is not null ? Ok(user) : NotFound();
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] CreateUserDto dto)
+        public IActionResult Create([FromBody] CreateUserRequestDto dto)
         {
-            User lobby = new() { Name = dto.Name, AuthToken = "todo" };
-            User created = _service.Create(lobby);
-            return CreatedAtAction(nameof(Get), new { id = 1 }, lobby);
+            User created = _service.Create(dto.Name);
+
+            CreateUserResponseDto response = new()
+            {
+                Id = created.Id,
+                Name = created.Name,
+                AuthToken = created.AuthToken,
+            };
+
+            return CreatedAtAction(nameof(Get), new { id = created.Id }, response);
         }
     }
 }
