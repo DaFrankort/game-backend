@@ -12,7 +12,19 @@ namespace Server.Controllers
         private readonly LobbyService _service = service;
 
         [HttpGet]
-        public IActionResult GetAll() => Ok(_service.GetAll());
+        public IActionResult GetAll()
+        {
+            var summaries = _service
+                .GetAll()
+                .Select(l => new LobbySummaryDto
+                {
+                    Id = l.Id,
+                    Name = l.Name,
+                    UserCount = l.Users.Count,
+                });
+
+            return Ok(summaries);
+        }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
