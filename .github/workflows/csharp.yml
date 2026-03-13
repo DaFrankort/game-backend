@@ -8,22 +8,6 @@ on:
     workflow_dispatch:
 
 jobs:
-  lint:
-    name: SuperLinter
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Run Super Linter
-        uses: github/super-linter@v6
-        env:
-          DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VALIDATE_CSHARP: true
-          FILTER_REGEX_INCLUDE: server/.*
-
   csharpier:
     name: CSharpier
     runs-on: ubuntu-latest
@@ -45,7 +29,7 @@ jobs:
         run: dotnet tool install -g csharpier
 
       - name: Check formatting
-        run: csharpier --check .
+        run: csharpier --check ./
 
   format:
     name: Format
