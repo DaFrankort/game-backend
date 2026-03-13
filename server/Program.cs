@@ -25,7 +25,7 @@ var summaries = new[]
     "Balmy",
     "Hot",
     "Sweltering",
-    "Scorching"
+    "Scorching",
 };
 
 app.MapGet(
