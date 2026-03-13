@@ -9,7 +9,7 @@ on:
 
 jobs:
   lint:
-    name: Linting
+    name: SuperLinter
     runs-on: ubuntu-latest
 
     steps:
@@ -23,6 +23,29 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_CSHARP: true
           FILTER_REGEX_INCLUDE: server/.*
+
+  csharpier:
+    name: CSharpier
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./server
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
+      - name: Install CSharpier
+        run: dotnet tool install -g csharpier
+
+      - name: Check formatting
+        run: csharpier --check .
 
   format:
     name: Format
