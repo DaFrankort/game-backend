@@ -30,7 +30,7 @@ jobs:
 
             - name: Run prettier
               working-directory: ./client
-              run: npx prettier package.json "./src/**/*.ts" -c
+              run: npx prettier package.json "./src/**/*.{ts,tsx}" -c
 
     eslint:
         runs-on: ubuntu-latest
