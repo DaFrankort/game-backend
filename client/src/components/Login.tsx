@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { User } from "./Types";
-import { addCacheUser } from "./Cache";
+import { addCacheUser, delCacheUser, isLoggedIn } from "./Cache";
 
 interface AuthResponse extends User {
   authToken: string;
@@ -10,6 +10,7 @@ export default function Login() {
   const [name, setName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const loggedIn = isLoggedIn();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,13 +27,10 @@ export default function Login() {
       });
 
       if (!res.ok) throw new Error("Failed to login");
-
       const data: AuthResponse = await res.json();
 
       addCacheUser(data.id, data.authToken);
-
-      console.log("Logged in:", data);
-      alert(`Logged in as user ${data.id}`);
+      window.location.reload();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message || "Unknown error");
@@ -41,6 +39,20 @@ export default function Login() {
     }
   };
 
+  if (loggedIn) {
+    const handleLogout = () => {
+      delCacheUser();
+      window.location.reload();
+    };
+    return (
+      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <p>Name</p>
+        <button type="submit" disabled={loading} onClick={handleLogout}>
+          {loading ? "Logging out..." : "Log-out"}
+        </button>
+      </div>
+    );
+  } else {
   return (
     <form onSubmit={handleSubmit}>
       <input
@@ -56,4 +68,5 @@ export default function Login() {
       {error && <p style={{ color: "red" }}>{error}</p>}
     </form>
   );
+}
 }
