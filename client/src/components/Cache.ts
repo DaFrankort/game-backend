@@ -14,3 +14,7 @@ export function getCacheBearerToken(): string | null {
     if (auth) return `Bearer ${auth}`;
     return null;
 }
+
+export function isLoggedIn(): boolean {
+    return getCacheUserId() != null && getCacheBearerToken() != null;
+}
