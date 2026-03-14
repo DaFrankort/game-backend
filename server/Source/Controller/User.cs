@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Server.Attributes;
 using Server.Models;
 using Server.Services;
 
@@ -11,9 +12,11 @@ namespace Server.Controllers
         private readonly UserService _service = service;
 
         [HttpGet]
+        [RequireAuth]
         public IActionResult GetAll() => Ok(_service.GetAll());
 
         [HttpGet("{id}")]
+        [RequireAuth]
         public IActionResult Get(int id)
         {
             User? user = _service.GetById(id);
