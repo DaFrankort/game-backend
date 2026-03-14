@@ -10,6 +10,8 @@ public class UserService
 
     public User? GetById(int id) => _users.FirstOrDefault(l => l.Id == id);
 
+    public User? GetByToken(string token) => _users.FirstOrDefault(u => u.AuthToken == token);
+
     public User Create(string Name)
     {
         string token = GenerateToken();

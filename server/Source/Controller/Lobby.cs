@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Server.Attributes;
 using Server.DTO;
-using Server.Exceptions;
 using Server.Models;
 using Server.Services;
 
@@ -8,6 +8,7 @@ namespace Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [RequireAuth]
     public class LobbyController(LobbyService service) : ControllerBase
     {
         private readonly LobbyService _service = service;
