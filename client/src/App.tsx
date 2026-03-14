@@ -4,7 +4,6 @@ import Login from "./components/Login";
 import CreateLobbyButton from "./components/OpenLobbyButton";
 
 function App() {
-
   return (
     <div>
       <div className="lobby-list-header">

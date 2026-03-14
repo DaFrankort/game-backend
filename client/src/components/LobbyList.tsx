@@ -10,15 +10,15 @@ export default function LobbyListComponent() {
   useEffect(() => {
     if (!loggedIn || !token) return;
     const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-      'Authorization': token
+      "Content-Type": "application/json",
+      Authorization: token,
     };
 
     fetch(`${import.meta.env.VITE_BACKEND_URL}/api/lobby`, {
-      method: 'GET',
+      method: "GET",
       headers,
     })
-      .then(res => {
+      .then((res) => {
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
         }
@@ -35,7 +35,7 @@ export default function LobbyListComponent() {
   return (
     <ul>
       {Array.isArray(lobbies) && lobbies.length > 0 ? (
-        lobbies.map(lobby => (
+        lobbies.map((lobby) => (
           <li key={lobby.id}>
             {lobby.name} - Users: {lobby.userCount}
           </li>
