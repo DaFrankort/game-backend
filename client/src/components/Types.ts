@@ -1,19 +1,19 @@
 export type LobbyList = {
-  id: number;
+  id: string;
   name: string;
   memberCount: number;
   maxMembers: number;
 }[];
 
 export interface Lobby {
-  id: number;
+  id: string;
   name: string;
   members: User[];
   maxMembers: number;
 }
 
 export interface User {
-  id: number;
+  id: string;
   name: string;
 }
 

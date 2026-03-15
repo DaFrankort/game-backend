@@ -21,7 +21,7 @@ namespace Server.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public IActionResult Get(string id)
         {
             Lobby? lobby = _service.GetById(id);
             return lobby is not null ? Ok(lobby) : NotFound();
@@ -30,13 +30,13 @@ namespace Server.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] CreateLobbyRequestDto dto)
         {
-            Lobby lobby = new() { Name = dto.Name };
+            Lobby lobby = new(dto.Name);
             Lobby created = _service.Create(lobby);
             return CreatedAtAction(nameof(Get), new { id = lobby.Id }, lobby);
         }
 
         [HttpPost("{lobbyId}/members")]
-        public IActionResult Join(int lobbyId)
+        public IActionResult Join(string lobbyId)
         {
             User? user = (User?)HttpContext.Items["User"];
             if (user == null)
@@ -46,7 +46,7 @@ namespace Server.Controllers
         }
 
         [HttpDelete("{lobbyId}/members/{userId}")]
-        public IActionResult Leave(int lobbyId, int userId)
+        public IActionResult Leave(string lobbyId, string userId)
         {
             Lobby lobby = _service.RemoveMember(lobbyId, userId);
             return Ok(lobby);

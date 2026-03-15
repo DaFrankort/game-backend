@@ -38,14 +38,10 @@ export default function CreateLobbyButton() {
         throw new Error(`Failed to create lobby. Status: ${res.status}`);
       }
 
-      const data = await res.json();
-      console.log("Lobby created successfully:", data);
       setLobbyName("");
-
       window.location.reload(); // Crude solution, but refreshes the lobby-list.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      console.error(err);
       setError(err.message || "Something went wrong");
     } finally {
       setLoading(false);

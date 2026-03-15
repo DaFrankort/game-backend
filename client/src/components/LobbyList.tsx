@@ -26,7 +26,7 @@ export default function LobbyListComponent() {
         return res.json();
       })
       .then((data: LobbyList) => setLobbies(Array.isArray(data) ? data : []))
-      .catch(console.error);
+      .catch((err) => alert(err));
   }, [loggedIn, token]);
 
   if (!loggedIn) {
