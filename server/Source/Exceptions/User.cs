@@ -9,4 +9,6 @@ namespace Server.Exceptions
         : Exception($"User {Id} is already in a lobby.") { }
 
     public class UserNotInLobbyException(string Id) : Exception($"User {Id} is not in a lobby.") { }
+
+    public class UserCanNotBeDeleted(string reason) : Exception($"Can't remove user: {reason}") { }
 }

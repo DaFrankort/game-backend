@@ -27,6 +27,16 @@ namespace Server.Controllers
             return user is not null ? Ok(user) : NotFound();
         }
 
+        [HttpDelete]
+        [RequireAuth]
+        public IActionResult Delete()
+        {
+            User invoker = HttpContextUtil.GetUser(HttpContext);
+            _service.Delete(invoker); // Users can only remove their own account, if they're not in a lobby.
+
+            return NoContent();
+        }
+
         [HttpGet("me")]
         [RequireAuth]
         public IActionResult GetMe()
