@@ -19,6 +19,9 @@ public class LobbyService(UserService userService)
 
     public Lobby Create(Lobby lobby, User host)
     {
+        if (host.LobbyId != null)
+            throw new UserInLobbyException(host.Id);
+
         _lobbies.Add(lobby);
         AddMember(lobby.Id, host.Id);
         return lobby;
