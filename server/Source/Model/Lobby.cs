@@ -1,9 +1,9 @@
 namespace Server.Models;
 
-public class Lobby
+public class Lobby(string name)
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = "Lobby";
+    public string Id { get; } = Guid.NewGuid().ToString();
+    public string Name { get; set; } = name;
     public List<User> Members { get; set; } = [];
     public int MaxMembers { get; } = 2; // Currently not adjustable
 }

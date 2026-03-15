@@ -10,16 +10,15 @@ public class LobbyService(UserService userService)
 
     public IEnumerable<Lobby> GetAll() => _lobbies;
 
-    public Lobby? GetById(int id) => _lobbies.FirstOrDefault(l => l.Id == id);
+    public Lobby? GetById(string id) => _lobbies.FirstOrDefault(lobby => lobby.Id == id);
 
     public Lobby Create(Lobby lobby)
     {
-        lobby.Id = _lobbies.Count > 0 ? _lobbies.Max(l => l.Id) + 1 : 1;
         _lobbies.Add(lobby);
         return lobby;
     }
 
-    public Lobby AddMember(int lobbyId, int userId)
+    public Lobby AddMember(string lobbyId, string userId)
     {
         Lobby? lobby = GetById(lobbyId) ?? throw new LobbyNotFoundException(lobbyId);
         if (lobby.Members.Count >= lobby.MaxMembers)
@@ -27,7 +26,7 @@ public class LobbyService(UserService userService)
 
         User? user = _userService.GetById(userId) ?? throw new UserNotFoundException(userId);
 
-        if (user.InLobby())
+        if (user.LobbyId == null)
             throw new UserInLobbyException(userId);
         user.LobbyId = lobbyId;
 
@@ -35,12 +34,12 @@ public class LobbyService(UserService userService)
         return lobby;
     }
 
-    public Lobby RemoveMember(int lobbyId, int userId)
+    public Lobby RemoveMember(string lobbyId, string userId)
     {
         Lobby? lobby = GetById(lobbyId) ?? throw new LobbyNotFoundException(lobbyId);
         User? user = _userService.GetById(userId) ?? throw new UserNotFoundException(userId);
 
-        if (!user.InLobby())
+        if (user.LobbyId == null)
             throw new UserNotInLobbyException(userId);
         user.LobbyId = null;
 

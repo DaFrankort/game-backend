@@ -17,7 +17,7 @@ namespace Server.Controllers
 
         [HttpGet("{id}")]
         [RequireAuth]
-        public IActionResult Get(int id)
+        public IActionResult Get(string id)
         {
             User? user = _service.GetById(id);
             return user is not null ? Ok(user) : NotFound();
@@ -37,13 +37,7 @@ namespace Server.Controllers
         {
             User created = _service.Create(dto.Name);
 
-            CreateUserResponseDto response = new()
-            {
-                Id = created.Id,
-                Name = created.Name,
-                AuthToken = created.AuthToken,
-            };
-
+            CreateUserResponseDto response = new(created);
             return CreatedAtAction(nameof(Get), new { id = created.Id }, response);
         }
     }

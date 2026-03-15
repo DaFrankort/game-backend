@@ -9,7 +9,7 @@ namespace Server.DTO
 
     public class LobbySummaryDto(Lobby lobby)
     {
-        public int Id { get; set; } = lobby.Id;
+        public string Id { get; set; } = lobby.Id;
         public string Name { get; set; } = lobby.Name;
         public int MemberCount { get; set; } = lobby.Members.Count;
         public int MaxMembers { get; set; } = lobby.MaxMembers;
