@@ -16,6 +16,7 @@ Because of this, some parts of the project are intentionally simplified:
 - The frontend is a demo and should be treated as such, code in the ``./client`` folder may be suboptimal, but functional to interact with the backend in its current state.
 - There is no SQL database, everything is stored in-memory. This way any long-term storage solutions can be chosen down the line.
 - User authentication is functional, but simplified. There are no e-mails or passwords, since for some simpler projects you may not need these.
+- Services use thread-locking to protect shared state, instead of relying on inherently thread-safe collections. This keeps the implementation flexible, so the storage mechanism can be changed in the future.
 
 ## Project Structure
 - ``./.github`` -> CI/CD workflows
