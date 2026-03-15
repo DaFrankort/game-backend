@@ -1,6 +1,6 @@
 # Lobby Manager API
 A REST API template for managing game lobbies and users.
-The back-end is built with C# (.NET 9.0) and ASP.NET core.
+The backend is built with C# (.NET 9.0) and ASP.NET core.
 A lightweight demo frontend is included using Node.js, TypeScript, React, and Vite.
 
 ## Features
@@ -13,7 +13,7 @@ A lightweight demo frontend is included using Node.js, TypeScript, React, and Vi
 ## Project Scope
 The main focus of this project is building a clean, extensible backend architecture.
 Because of this, some parts of the project are intentionally simplified:
-- The front-end is a demo and should be treated as such, code in the ``./client`` folder may be suboptimal, but functional to interact with the backend in it's current state.
+- The frontend is a demo and should be treated as such, code in the ``./client`` folder may be suboptimal, but functional to interact with the backend in its current state.
 - There is no SQL database, everything is stored in-memory. This way any long-term storage solutions can be chosen down the line.
 - User authentication is functional, but simplified. There are no e-mails or passwords, since for some simpler projects you may not need these.
 
@@ -30,16 +30,16 @@ git clone https://github.com/DaFrankort/game-backend.git
 
 Copy the ``example.env`` file and rename it to ``.env``. You may need to change the URL later depending on where the backend server runs.
 
-## Back-end
-The back-end server can be launched by using the following command.
+## Backend
+The backend server can be launched by using the following command.
 ```
 cd server
 dotnet run
 ```
 
-## Front-end
-Start the back-end before starting the front-end, and ensure the URL in ``.env`` is the same URL the back-end is running on.
-The front-end can be run by using the following commands:
+## Frontend
+Start the backend before starting the frontend, and ensure the URL in ``.env`` is the same URL the backend is running on.
+The frontend can be run by using the following commands:
 ```
 cd client
 npm install
@@ -49,15 +49,15 @@ npm run dev
 # Endpoints
 The backend has the following endpoints:
 ## Users
-- ``POST /api/user`` - Create a new user, requires a JSON body with the name of the user using the following format: ``{ "name": "Username" }``. Important to note that doing this will return JSON for your user *with* a unique **bearer-token**, this token is required in all your other requests or they will be denied.
+- ``POST /api/user`` - Create a new user, requires a JSON body with the name of the user using the following format: ``{ "name": "Username" }``. Important to note that doing this will return JSON for your user *with* a unique **bearer token**, this token is required in all your other requests or they will be denied.
 - ``GET /api/user/{userId}`` - Get specific information from a user.
-- ``GET /api/user/me`` - Using your bearer-token as context, will return your associated user-profile.
+- ``GET /api/user/me`` - Using your bearer token as context, will return your associated user-profile.
 - ``GET /api/user`` - Get an overview of all users.
 
 ## Lobbies
-All lobby endpoints require you to have a valid **bearer-token**. You can get one by creating a user.
+All lobby endpoints require you to have a valid **bearer token**. You can get one by creating a user.
 - ``GET /api/lobby`` - Get an overview of all lobbies, with limited information about users.
 - ``POST /api/lobby`` - Create a new lobby, requires a body with the name for the lobby, using the following format: ``{ "name": "MyLobby" }``.
 - ``GET /api/lobby/{lobbyId}`` - Get information about a specific lobby.
-- ``POST /api/lobby/{lobbyId}/members`` - Join a lobby, this will use your bearer-token to determine which user to add. A user can only be added to a lobby by themselves.
+- ``POST /api/lobby/{lobbyId}/members`` - Join a lobby, this will use your bearer token to determine which user to add. A user can only be added to a lobby by themselves.
 - ``DELETE /api/lobby/{lobbyId}/members/{userId}`` - Remove a user from a lobby, this can be done by other users too (TODO - Allow only lobby-owners to kick anyone).
