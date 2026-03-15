@@ -8,6 +8,11 @@ public class UserService
 
     public IEnumerable<User> GetAll() => _users;
 
+    public IEnumerable<User> GetPaged(int page, int limit)
+    {
+        return _users.Skip((page - 1) * limit).Take(limit);
+    }
+
     public User? GetById(string id) => _users.FirstOrDefault(lobby => lobby.Id == id);
 
     public User? GetByToken(string token) => _users.FirstOrDefault(u => u.AuthToken == token);

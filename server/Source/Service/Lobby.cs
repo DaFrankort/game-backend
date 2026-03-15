@@ -10,6 +10,11 @@ public class LobbyService(UserService userService)
 
     public IEnumerable<Lobby> GetAll() => _lobbies;
 
+    public IEnumerable<Lobby> GetPaged(int page, int limit)
+    {
+        return _lobbies.Skip((page - 1) * limit).Take(limit);
+    }
+
     public Lobby? GetById(string id) => _lobbies.FirstOrDefault(lobby => lobby.Id == id);
 
     public Lobby Create(Lobby lobby)

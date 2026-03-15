@@ -13,7 +13,10 @@ namespace Server.Controllers
 
         [HttpGet]
         [RequireAuth]
-        public IActionResult GetAll() => Ok(_service.GetAll());
+        public IActionResult GetAll([FromQuery] int page = 1, [FromQuery] int limit = 100)
+        {
+            return Ok(_service.GetPaged(page, limit));
+        }
 
         [HttpGet("{id}")]
         [RequireAuth]

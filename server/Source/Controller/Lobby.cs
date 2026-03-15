@@ -14,9 +14,11 @@ namespace Server.Controllers
         private readonly LobbyService _service = service;
 
         [HttpGet]
-        public IActionResult GetAll()
+        public IActionResult GetAll([FromQuery] int page = 1, [FromQuery] int limit = 100)
         {
-            var summaries = _service.GetAll().Select(l => new LobbySummaryDto(l));
+            var summaries = _service
+                .GetPaged(page, limit)
+                .Select(lobby => new LobbySummaryDto(lobby));
             return Ok(summaries);
         }
 
