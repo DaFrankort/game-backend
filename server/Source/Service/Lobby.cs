@@ -32,7 +32,7 @@ public class LobbyService(UserService userService)
 
         User user = _userService.GetById(userId) ?? throw new UserNotFoundException(userId);
 
-        if (user.LobbyId == null)
+        if (user.LobbyId != null)
             throw new UserInLobbyException(userId);
         user.LobbyId = lobbyId;
 
