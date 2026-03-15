@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import type { User } from "./Types";
-import { addCacheUser, delCacheUser, getCacheBearerToken, isLoggedIn } from "./Cache";
+import {
+  addCacheUser,
+  delCacheUser,
+  getCacheBearerToken,
+  isLoggedIn,
+} from "./Cache";
 
 interface AuthResponse extends User {
   authToken: string;
@@ -24,12 +29,15 @@ export default function Login() {
           return;
         }
 
-        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/me`, {
-          method: "GET",
-          headers: {
-            Authorization: token,
+        const res = await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/api/user/me`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: token,
+            },
           },
-        });
+        );
 
         if (!res.ok) {
           handleLogout();
@@ -93,20 +101,19 @@ export default function Login() {
     );
   }
 
-    return (
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Enter your name"
-          required
-        />
-        <button type="submit" disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
-        </button>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-      </form>
-    );
-
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Enter your name"
+        required
+      />
+      <button type="submit" disabled={loading}>
+        {loading ? "Logging in..." : "Login"}
+      </button>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+    </form>
+  );
 }
