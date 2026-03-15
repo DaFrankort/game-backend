@@ -1,5 +1,6 @@
 namespace Server.Services;
 
+using Server.Exceptions;
 using Server.Models;
 
 public class UserService
@@ -13,9 +14,20 @@ public class UserService
         return _users.Skip((page - 1) * limit).Take(limit);
     }
 
-    public User? GetById(string id) => _users.FirstOrDefault(lobby => lobby.Id == id);
+    public User GetById(string id)
+    {
+        User user =
+            _users.FirstOrDefault(lobby => lobby.Id == id) ?? throw new UserNotFoundException(id);
+        return user;
+    }
 
-    public User? GetByToken(string token) => _users.FirstOrDefault(u => u.AuthToken == token);
+    public User GetByToken(string token)
+    {
+        User user =
+            _users.FirstOrDefault(user => user.AuthToken == token)
+            ?? throw new UserNotFoundException(token);
+        return user;
+    }
 
     public User Create(string name)
     {

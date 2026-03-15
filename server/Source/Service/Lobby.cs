@@ -15,7 +15,13 @@ public class LobbyService(UserService userService)
         return _lobbies.Skip((page - 1) * limit).Take(limit);
     }
 
-    public Lobby? GetById(string id) => _lobbies.FirstOrDefault(lobby => lobby.Id == id);
+    public Lobby GetById(string id)
+    {
+        Lobby lobby =
+            _lobbies.FirstOrDefault(lobby => lobby.Id == id)
+            ?? throw new LobbyNotFoundException(id);
+        return lobby;
+    }
 
     public Lobby Create(Lobby lobby, User host)
     {

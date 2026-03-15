@@ -10,9 +10,8 @@ namespace Server.Filters
         {
             context.Result = context.Exception switch
             {
-                LobbyNotFoundException or UserNotFoundException => new NotFoundObjectResult(
-                    context.Exception.Message
-                ),
+                LobbyNotFoundException or UserNotFoundException or UserTokenNotFoundException =>
+                    new NotFoundObjectResult(context.Exception.Message),
                 UserInLobbyException or UserNotInLobbyException or LobbyFullException =>
                     new BadRequestObjectResult(context.Exception.Message),
                 _ => new ObjectResult("An unexpected error occurred.") { StatusCode = 500 },

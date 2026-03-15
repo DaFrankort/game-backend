@@ -23,7 +23,7 @@ namespace Server.Controllers
         [RequireAuth]
         public IActionResult Get(string id)
         {
-            User? user = _service.GetById(id);
+            User user = _service.GetById(id);
             return user is not null ? Ok(user) : NotFound();
         }
 
