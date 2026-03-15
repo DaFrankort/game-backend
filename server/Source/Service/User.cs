@@ -3,7 +3,7 @@ namespace Server.Services;
 using Server.Exceptions;
 using Server.Models;
 
-public class UserService
+public class UserService()
 {
     private readonly List<User> _users = [];
 
@@ -34,6 +34,14 @@ public class UserService
         string token = GenerateToken();
         User user = new(name, token);
         _users.Add(user);
+        return user;
+    }
+
+    public User Delete(User user)
+    {
+        if (user.LobbyId != null)
+            throw new UserCanNotBeDeleted("User is still in a lobby.");
+        _users.Remove(user);
         return user;
     }
 
