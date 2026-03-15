@@ -39,7 +39,9 @@ export default function LobbyListComponent() {
         lobbies.map((lobby) => (
           <li key={lobby.id} className="lobby-item">
             <b>{lobby.name}</b>
-            <p>{lobby.memberCount}/{lobby.maxMembers} Users</p>
+            <p>
+              {lobby.memberCount}/{lobby.maxMembers} Users
+            </p>
           </li>
         ))
       ) : (
