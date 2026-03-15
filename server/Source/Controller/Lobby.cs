@@ -53,11 +53,10 @@ namespace Server.Controllers
             return Ok(lobby);
         }
 
-        [HttpPost("leave")]
-        public IActionResult Leave([FromBody] JoinLobbyRequestDto dto)
+        [HttpDelete("{lobbyId}/members/{userId}")]
+        public IActionResult Leave(int lobbyId, int userId)
         {
-            _service.RemoveUser(dto.LobbyId, dto.UserId);
-            Lobby lobby = _service.GetById(dto.LobbyId)!;
+            Lobby lobby = _service.RemoveUser(lobbyId, userId);
             return Ok(lobby);
         }
     }

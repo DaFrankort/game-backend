@@ -35,7 +35,7 @@ public class LobbyService(UserService userService)
         return lobby;
     }
 
-    public void RemoveUser(int lobbyId, int userId)
+    public Lobby RemoveUser(int lobbyId, int userId)
     {
         Lobby? lobby = GetById(lobbyId) ?? throw new LobbyNotFoundException(lobbyId);
         User? user = _userService.GetById(userId) ?? throw new UserNotFoundException(userId);
@@ -45,5 +45,6 @@ public class LobbyService(UserService userService)
         user.LobbyId = null;
 
         lobby.Users.RemoveAll(u => u.Id == userId);
+        return lobby;
     }
 }
