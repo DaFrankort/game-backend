@@ -58,8 +58,13 @@ public class LobbyService(UserService userService)
         if (target.Id == lobby.Host.Id)
         {
             if (lobby.Members.Count > 0)
-                lobby.Host = lobby.Members[0]; // Assign new host.
-            // TODO - Close lobby if no users.
+            {
+                lobby.Host = lobby.Members[0];
+            }
+            else
+            {
+                // TODO - Remove lobby
+            }
         }
 
         return lobby;
