@@ -17,6 +17,10 @@
     transition: all 0.1ms ease;
 }
 
+.lobby-item.full {
+    color: gray;
+}
+
 .lobby-item.clickable:hover {
     background-color: cadetblue;
 }

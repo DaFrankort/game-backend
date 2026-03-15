@@ -75,7 +75,7 @@ export default function LobbyListComponent() {
       return (
         <tr
           key={lobby.id}
-          className={`lobby-item ${joinable ? "clickable" : ""}`}
+          className={`lobby-item ${joinable ? "clickable" : "full"}`}
           onClick={joinable ? () => joinLobby(lobby.id) : undefined}
         >
           <td>{lobby.name}</td>
