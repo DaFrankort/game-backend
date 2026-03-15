@@ -88,7 +88,7 @@ export default function LobbyPage() {
   };
 
   if (!lobby) {
-    return <p>Loading lobby...</p>;
+    navigate("/", { replace: true });
   }
 
   const isHost = currentUserId === lobby.host.id;
