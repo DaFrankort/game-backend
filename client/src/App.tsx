@@ -1,20 +1,15 @@
 import "./App.css";
-import LobbyList from "./components/LobbyList";
-import Login from "./components/Login";
-import CreateLobbyButton from "./components/CreateLobbyButton";
+import { Navigate, Route, Routes } from "react-router-dom";
+import HomePage from "./pages/Home";
+import LobbyPage from "./pages/Lobby";
 
 function App() {
   return (
-    <div>
-      <div className="lobby-list-header">
-        <h1>Join a lobby!</h1>
-        <CreateLobbyButton></CreateLobbyButton>
-        <Login></Login>
-      </div>
-      <div className="card">
-        <LobbyList></LobbyList>
-      </div>
-    </div>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/lobby/:id" element={<LobbyPage />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
 
