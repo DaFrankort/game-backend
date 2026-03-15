@@ -16,3 +16,7 @@ export interface User {
   id: number;
   name: string;
 }
+
+export interface AuthResponse extends User {
+  authToken: string;
+}
