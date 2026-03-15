@@ -43,7 +43,7 @@ export default function LobbyListComponent() {
             "Content-Type": "application/json",
             Authorization: token,
           },
-        }
+        },
       );
 
       if (!res.ok) {
