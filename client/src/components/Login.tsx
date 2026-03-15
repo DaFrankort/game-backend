@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { User } from "./Types";
-import { addCacheUser, delCacheUser, isLoggedIn } from "./Cache";
+import { addCacheUser, delCacheUser, getCacheBearerToken, isLoggedIn } from "./Cache";
 
 interface AuthResponse extends User {
   authToken: string;
@@ -10,7 +10,42 @@ export default function Login() {
   const [name, setName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const loggedIn = isLoggedIn();
+
+  useEffect(() => {
+    if (!loggedIn) return;
+
+    const fetchUser = async () => {
+      try {
+        const token = getCacheBearerToken();
+        if (!token) {
+          handleLogout();
+          return;
+        }
+
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/me`, {
+          method: "GET",
+          headers: {
+            Authorization: token,
+          },
+        });
+
+        if (!res.ok) {
+          handleLogout();
+          return;
+        }
+
+        const data: User = await res.json();
+        setCurrentUser(data);
+      } catch (err) {
+        console.error(err);
+        handleLogout();
+      }
+    };
+
+    fetchUser();
+  }, [loggedIn]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +65,10 @@ export default function Login() {
       const data: AuthResponse = await res.json();
 
       addCacheUser(data.id, data.authToken);
-      window.location.reload();
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 50);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message || "Unknown error");
@@ -39,20 +77,22 @@ export default function Login() {
     }
   };
 
-  if (loggedIn) {
-    const handleLogout = () => {
-      delCacheUser();
-      window.location.reload();
-    };
+  const handleLogout = () => {
+    delCacheUser();
+    window.location.reload();
+  };
+
+  if (loggedIn && currentUser) {
     return (
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-        <p>Name</p>
-        <button type="submit" disabled={loading} onClick={handleLogout}>
+        <p>{currentUser.name}</p>
+        <button type="button" disabled={loading} onClick={handleLogout}>
           {loading ? "Logging out..." : "Log-out"}
         </button>
       </div>
     );
-  } else {
+  }
+
     return (
       <form onSubmit={handleSubmit}>
         <input
@@ -68,5 +108,5 @@ export default function Login() {
         {error && <p style={{ color: "red" }}>{error}</p>}
       </form>
     );
-  }
+
 }
