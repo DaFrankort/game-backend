@@ -50,7 +50,7 @@ npm run dev
 The backend has the following endpoints:
 ## Users
 - ``POST /api/user`` - Create a new user, requires a JSON body with the name of the user using the following format: ``{ "name": "Username" }``. Important to note that doing this will return JSON for your user *with* a unique **bearer token**, this token is required in all your other requests or they will be denied.
-- ``DELETE /api/user`` - Delete your user, this will use your bearer token to determine which user to delete.
+- ``DELETE /api/user`` - Delete your user, this will use your bearer token to determine which user to delete. A user can only delete themselves, and be deleted when they're not in a lobby.
 - ``GET /api/user/{userId}`` - Get specific information from a user.
 - ``GET /api/user/me`` - Using your bearer token as context, will return your associated user-profile.
 - ``GET /api/user`` - Get an overview of all users.
