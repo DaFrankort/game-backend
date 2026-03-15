@@ -3,6 +3,7 @@ using Server.Attributes;
 using Server.DTO;
 using Server.Models;
 using Server.Services;
+using Server.Utility;
 
 namespace Server.Controllers
 {
@@ -32,9 +33,7 @@ namespace Server.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] CreateLobbyRequestDto dto)
         {
-            User? host = (User?)HttpContext.Items["User"];
-            if (host == null)
-                return Unauthorized();
+            User host = HttpContextUtil.GetUser(HttpContext);
             Lobby lobby = new(dto.Name, host);
             Lobby created = _service.Create(lobby);
             return CreatedAtAction(nameof(Get), new { id = lobby.Id }, lobby);
@@ -43,9 +42,7 @@ namespace Server.Controllers
         [HttpPost("{lobbyId}/members")]
         public IActionResult Join(string lobbyId)
         {
-            User? user = (User?)HttpContext.Items["User"];
-            if (user == null)
-                return Unauthorized();
+            User user = HttpContextUtil.GetUser(HttpContext);
             Lobby lobby = _service.AddMember(lobbyId, user.Id);
             return Ok(lobby);
         }
@@ -53,9 +50,7 @@ namespace Server.Controllers
         [HttpDelete("{lobbyId}/members")]
         public IActionResult Leave(string lobbyId)
         {
-            User? user = (User?)HttpContext.Items["User"];
-            if (user == null)
-                return Unauthorized();
+            User user = HttpContextUtil.GetUser(HttpContext);
             Lobby lobby = _service.RemoveMember(lobbyId, user.Id, user);
             return Ok(lobby);
         }
@@ -63,9 +58,7 @@ namespace Server.Controllers
         [HttpDelete("{lobbyId}/members/{userId}")]
         public IActionResult KickMember(string lobbyId, string userId)
         {
-            User? user = (User?)HttpContext.Items["User"];
-            if (user == null)
-                return Unauthorized();
+            User user = HttpContextUtil.GetUser(HttpContext);
             Lobby lobby = _service.RemoveMember(lobbyId, userId, user);
             return Ok(lobby);
         }
