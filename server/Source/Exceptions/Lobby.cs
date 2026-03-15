@@ -4,6 +4,9 @@ namespace Server.Exceptions
 
     public class LobbyFullException() : Exception("The lobby you tried to join is full.") { }
 
-    public class LobbyCantRemoveException()
+    public class LobbyCantRemoveUserException()
         : Exception("You don't have permission to kick that user.") { }
+
+    public class LobbyCantDeleteException()
+        : Exception("You don't have permission to remove this lobby.") { }
 }

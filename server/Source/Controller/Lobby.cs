@@ -44,6 +44,14 @@ namespace Server.Controllers
             return CreatedAtAction(nameof(Get), new { id = lobby.Id }, lobby);
         }
 
+        [HttpDelete("{id}")]
+        public IActionResult Delete(string id)
+        {
+            User host = HttpContextUtil.GetUser(HttpContext);
+            Lobby deleted = _service.Delete(id, host);
+            return Ok(deleted);
+        }
+
         [HttpPost("{lobbyId}/members")]
         public IActionResult Join(string lobbyId)
         {
