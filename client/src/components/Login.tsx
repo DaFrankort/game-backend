@@ -1,15 +1,11 @@
 import { useEffect, useState } from "react";
-import type { User } from "./Types";
+import type { AuthResponse, User } from "./Types";
 import {
   addCacheUser,
   delCacheUser,
   getCacheBearerToken,
   isLoggedIn,
 } from "./Cache";
-
-interface AuthResponse extends User {
-  authToken: string;
-}
 
 export default function Login() {
   const [name, setName] = useState("");
@@ -72,7 +68,7 @@ export default function Login() {
       if (!res.ok) throw new Error("Failed to login");
       const data: AuthResponse = await res.json();
 
-      addCacheUser(data.id, data.authToken);
+      addCacheUser(data);
 
       setTimeout(() => {
         window.location.reload();
