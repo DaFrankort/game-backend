@@ -1,7 +1,7 @@
 import "./App.css";
 import LobbyList from "./components/LobbyList";
 import Login from "./components/Login";
-import CreateLobbyButton from "./components/OpenLobbyButton";
+import CreateLobbyButton from "./components/CreateLobbyButton";
 
 function App() {
   return (
