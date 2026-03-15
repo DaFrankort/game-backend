@@ -48,8 +48,8 @@ namespace Server.Controllers
         public IActionResult Delete(string id)
         {
             User host = HttpContextUtil.GetUser(HttpContext);
-            Lobby deleted = _service.Delete(id, host);
-            return Ok(deleted);
+            _service.Delete(id, host);
+            return NoContent();
         }
 
         [HttpPost("{lobbyId}/members")]
