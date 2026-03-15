@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
-import type { AuthResponse, User } from "./Types";
-import {
-  addCacheUser,
-  delCacheUser,
-  getCacheBearerToken,
-  isLoggedIn,
-} from "./Cache";
+import type { AuthResponse, User } from "../utils/Types";
+import { addCacheUser, delCacheUser, isLoggedIn } from "../utils/Cache";
 import { useNavigate } from "react-router-dom";
+import { fetchApi } from "../utils/Api";
 
 export default function Login() {
   const [name, setName] = useState("");
@@ -21,21 +17,7 @@ export default function Login() {
 
     const fetchUser = async () => {
       try {
-        const token = getCacheBearerToken();
-        if (!token) {
-          handleLogout();
-          return;
-        }
-
-        const res = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/api/user/me`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: token,
-            },
-          },
-        );
+        const res = await fetchApi("/api/user/me", "GET");
 
         if (!res.ok) {
           handleLogout();
@@ -44,7 +26,6 @@ export default function Login() {
 
         const data: User = await res.json();
         if (data.lobbyId) navigate(`/lobby/${data.lobbyId}`);
-
         setCurrentUser(data);
       } catch (err) {
         console.error(err);
@@ -61,19 +42,14 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name }),
-      });
+      const res = await fetchApi("/api/user", "POST", { name: name }, false);
+      if (!res.ok) {
+        alert("Failed to login");
+        return;
+      }
 
-      if (!res.ok) throw new Error("Failed to login");
       const data: AuthResponse = await res.json();
-
       addCacheUser(data);
-
       setTimeout(() => {
         window.location.reload();
       }, 50);
