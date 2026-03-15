@@ -9,6 +9,7 @@ export type LobbyList = {
 export interface Lobby {
   id: string;
   name: string;
+  host: User;
   members: User[];
   maxMembers: number;
 }
@@ -16,6 +17,7 @@ export interface Lobby {
 export interface User {
   id: string;
   name: string;
+  lobbyId: string | null;
 }
 
 export interface AuthResponse extends User {

@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { getCacheBearerToken, isLoggedIn } from "./Cache";
+import { useNavigate } from "react-router-dom";
+import type { Lobby } from "./Types";
 
 export default function CreateLobbyButton() {
   const [lobbyName, setLobbyName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const loggedIn = isLoggedIn();
   const token = getCacheBearerToken();
@@ -38,8 +41,8 @@ export default function CreateLobbyButton() {
         throw new Error(`Failed to create lobby. Status: ${res.status}`);
       }
 
-      setLobbyName("");
-      window.location.reload(); // Crude solution, but refreshes the lobby-list.
+      const data: Lobby = await res.json();
+      navigate(`/lobby/${data.id}`);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message || "Something went wrong");

@@ -6,12 +6,14 @@ import {
   getCacheBearerToken,
   isLoggedIn,
 } from "./Cache";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [name, setName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const navigate = useNavigate();
   const loggedIn = isLoggedIn();
 
   useEffect(() => {
@@ -41,6 +43,8 @@ export default function Login() {
         }
 
         const data: User = await res.json();
+        if (data.lobbyId) navigate(`/lobby/${data.lobbyId}`);
+
         setCurrentUser(data);
       } catch (err) {
         console.error(err);
@@ -49,7 +53,7 @@ export default function Login() {
     };
 
     fetchUser();
-  }, [loggedIn]);
+  }, [loggedIn, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
