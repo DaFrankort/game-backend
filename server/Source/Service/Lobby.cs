@@ -22,6 +22,9 @@ public class LobbyService(UserService userService)
     public void AddUser(int lobbyId, int userId)
     {
         Lobby? lobby = GetById(lobbyId) ?? throw new LobbyNotFoundException(lobbyId);
+        if (lobby.Users.Count >= lobby.MaxUsers)
+            throw new LobbyFullException();
+
         User? user = _userService.GetById(userId) ?? throw new UserNotFoundException(userId);
 
         if (user.InLobby())
