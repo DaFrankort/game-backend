@@ -26,15 +26,13 @@ namespace Server.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(string id)
         {
-            Lobby? lobby = _service.GetById(id);
-            if (lobby == null)
-                return NotFound();
-
+            Lobby lobby = _service.GetById(id);
             User user = HttpContextUtil.GetUser(HttpContext);
             bool isMember = lobby.Members.Any(member => member.Id == user.Id);
-            if (!isMember)
-                return Ok(new LobbySummaryDto(lobby));
-            return Ok(lobby);
+
+            if (isMember)
+                return Ok(lobby);
+            return Ok(new LobbySummaryDto(lobby));
         }
 
         [HttpPost]

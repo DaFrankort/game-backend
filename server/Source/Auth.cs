@@ -16,7 +16,7 @@ namespace Server.Middleware
             if (header != null && header.StartsWith("Bearer "))
             {
                 string token = header["Bearer ".Length..];
-                User? user = userService.GetByToken(token);
+                User user = userService.GetByToken(token);
 
                 if (user != null)
                     context.Items["User"] = user;
