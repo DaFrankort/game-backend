@@ -32,7 +32,10 @@ namespace Server.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] CreateLobbyRequestDto dto)
         {
-            Lobby lobby = new(dto.Name);
+            User? host = (User?)HttpContext.Items["User"];
+            if (host == null)
+                return Unauthorized();
+            Lobby lobby = new(dto.Name, host);
             Lobby created = _service.Create(lobby);
             return CreatedAtAction(nameof(Get), new { id = lobby.Id }, lobby);
         }
@@ -47,10 +50,23 @@ namespace Server.Controllers
             return Ok(lobby);
         }
 
-        [HttpDelete("{lobbyId}/members/{userId}")]
-        public IActionResult Leave(string lobbyId, string userId)
+        [HttpDelete("{lobbyId}/members")]
+        public IActionResult Leave(string lobbyId)
         {
-            Lobby lobby = _service.RemoveMember(lobbyId, userId);
+            User? user = (User?)HttpContext.Items["User"];
+            if (user == null)
+                return Unauthorized();
+            Lobby lobby = _service.RemoveMember(lobbyId, user.Id, user);
+            return Ok(lobby);
+        }
+
+        [HttpDelete("{lobbyId}/members/{userId}")]
+        public IActionResult KickMember(string lobbyId, string userId)
+        {
+            User? user = (User?)HttpContext.Items["User"];
+            if (user == null)
+                return Unauthorized();
+            Lobby lobby = _service.RemoveMember(lobbyId, userId, user);
             return Ok(lobby);
         }
     }
