@@ -33,6 +33,25 @@ public class LobbyService(UserService userService)
         return lobby;
     }
 
+    private Lobby DeleteLobby(Lobby lobby)
+    {
+        foreach (User member in lobby.Members)
+        {
+            member.LobbyId = null;
+        }
+        _lobbies.Remove(lobby);
+        return lobby;
+    }
+
+    public Lobby Delete(string id, User invoker)
+    {
+        Lobby lobby = GetById(id);
+        if (lobby.Host.Id != invoker.Id)
+            throw new LobbyCantDeleteException();
+
+        return DeleteLobby(lobby);
+    }
+
     public Lobby AddMember(string lobbyId, string userId)
     {
         Lobby lobby = GetById(lobbyId) ?? throw new LobbyNotFoundException(lobbyId);
@@ -55,7 +74,7 @@ public class LobbyService(UserService userService)
         User target = _userService.GetById(userId) ?? throw new UserNotFoundException(userId);
 
         if ((invoker.Id != lobby.Host.Id) && (target.Id != invoker.Id))
-            throw new LobbyCantRemoveException();
+            throw new LobbyCantRemoveUserException();
 
         if (target.LobbyId == null)
             throw new UserNotInLobbyException(userId);
@@ -71,7 +90,7 @@ public class LobbyService(UserService userService)
             }
             else
             {
-                // TODO - Remove lobby
+                DeleteLobby(lobby);
             }
         }
 

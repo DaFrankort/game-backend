@@ -14,6 +14,8 @@ namespace Server.Filters
                     new NotFoundObjectResult(context.Exception.Message),
                 UserInLobbyException or UserNotInLobbyException or LobbyFullException =>
                     new BadRequestObjectResult(context.Exception.Message),
+                LobbyCantRemoveUserException or LobbyCantDeleteException =>
+                    new UnauthorizedObjectResult(context.Exception.Message),
                 _ => new ObjectResult("An unexpected error occurred.") { StatusCode = 500 },
             };
             context.ExceptionHandled = true;
