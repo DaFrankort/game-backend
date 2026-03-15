@@ -1,3 +1,0 @@
-[*.cs]
-dotnet_diagnostic.IDE0055.severity = none
-dotnet_analyzer_diagnostic.category-Style.severity = suggestion
