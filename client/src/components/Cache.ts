@@ -2,10 +2,16 @@ import type { AuthResponse } from "./Types";
 
 export function addCacheUser(data: AuthResponse) {
   localStorage.setItem("authToken", data.authToken);
+  localStorage.setItem("userId", data.id);
 }
 
 export function delCacheUser() {
   localStorage.removeItem("authToken");
+  localStorage.removeItem("userId");
+}
+
+export function getCurrentUserId(): string | null {
+  return localStorage.getItem("userId");
 }
 
 export function getCacheBearerToken(): string | null {
@@ -15,5 +21,5 @@ export function getCacheBearerToken(): string | null {
 }
 
 export function isLoggedIn(): boolean {
-  return getCacheBearerToken() != null;
+  return getCacheBearerToken() != null && getCurrentUserId() != null;
 }

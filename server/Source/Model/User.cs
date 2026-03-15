@@ -7,7 +7,6 @@ public class User(string name, string authToken)
     public string Id { get; } = Guid.NewGuid().ToString();
     public string Name { get; set; } = name;
 
-    [JsonIgnore]
     public string? LobbyId { get; set; } = null;
 
     [JsonIgnore]
