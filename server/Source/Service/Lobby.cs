@@ -17,8 +17,10 @@ public class LobbyService(UserService userService)
 
     public Lobby? GetById(string id) => _lobbies.FirstOrDefault(lobby => lobby.Id == id);
 
-    public Lobby Create(Lobby lobby)
+    public Lobby Create(Lobby lobby, User host)
     {
+        host.LobbyId = lobby.Id;
+        lobby.Members.Add(host);
         _lobbies.Add(lobby);
         return lobby;
     }
@@ -52,6 +54,14 @@ public class LobbyService(UserService userService)
         target.LobbyId = null;
 
         lobby.Members.RemoveAll(user => user.Id == userId);
+
+        if (target.Id == lobby.Host.Id)
+        {
+            if (lobby.Members.Count > 0)
+                lobby.Host = lobby.Members[0]; // Assign new host.
+            // TODO - Close lobby if no users.
+        }
+
         return lobby;
     }
 }

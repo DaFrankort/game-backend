@@ -35,7 +35,7 @@ namespace Server.Controllers
         {
             User host = HttpContextUtil.GetUser(HttpContext);
             Lobby lobby = new(dto.Name, host);
-            Lobby created = _service.Create(lobby);
+            Lobby created = _service.Create(lobby, host);
             return CreatedAtAction(nameof(Get), new { id = lobby.Id }, lobby);
         }
 
