@@ -1,26 +1,18 @@
 import { useState, useEffect } from "react";
-import type { LobbyList } from "./Types";
-import { getCacheBearerToken, isLoggedIn } from "./Cache";
+import type { LobbyList } from "../utils/Types";
+import { isLoggedIn } from "../utils/Cache";
 import "./LobbyList.css";
 import { useNavigate } from "react-router-dom";
+import { fetchApi } from "../utils/Api";
 
 export default function LobbyListComponent() {
   const [lobbies, setLobbies] = useState<LobbyList>([]);
-  const token = getCacheBearerToken();
   const loggedIn = isLoggedIn();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loggedIn || !token) return;
-    const headers: Record<string, string> = {
-      "Content-Type": "application/json",
-      Authorization: token,
-    };
-
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/lobby`, {
-      method: "GET",
-      headers,
-    })
+    if (!loggedIn) return;
+    fetchApi("/api/lobby", "GET")
       .then((res) => {
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
@@ -29,25 +21,17 @@ export default function LobbyListComponent() {
       })
       .then((data: LobbyList) => setLobbies(Array.isArray(data) ? data : []))
       .catch((err) => alert(err));
-  }, [loggedIn, token]);
+  }, [loggedIn]);
 
   async function joinLobby(lobbyId: string) {
-    if (!token) return;
+    if (!loggedIn) return;
 
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/lobby/${lobbyId}/members`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token,
-          },
-        },
-      );
+      const res = await fetchApi(`/api/lobby/${lobbyId}/members`, "POST");
 
       if (!res.ok) {
-        throw new Error(`Failed to join lobby: ${res.status}`);
+        alert(`Failed to join lobby: ${res.status}`);
+        return;
       }
 
       navigate(`/lobby/${lobbyId}`);

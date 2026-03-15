@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { getCacheBearerToken, isLoggedIn } from "./Cache";
+import { getCacheBearerToken, isLoggedIn } from "../utils/Cache";
 import { useNavigate } from "react-router-dom";
-import type { Lobby } from "./Types";
+import type { Lobby } from "../utils/Types";
+import { fetchApi } from "../utils/Api";
 
 export default function CreateLobbyButton() {
   const [lobbyName, setLobbyName] = useState("");
@@ -28,17 +29,12 @@ export default function CreateLobbyButton() {
     setError(null);
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/lobby`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-        body: JSON.stringify({ name: lobbyName.trim() }),
+      const res = await fetchApi("/api/lobby", "POST", {
+        name: lobbyName.trim(),
       });
-
       if (!res.ok) {
-        throw new Error(`Failed to create lobby. Status: ${res.status}`);
+        alert(`Failed to create lobby. Status: ${res.status}`);
+        return;
       }
 
       const data: Lobby = await res.json();

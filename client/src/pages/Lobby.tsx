@@ -1,7 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
-import type { Lobby } from "../components/Types";
-import { getCacheBearerToken, getCurrentUserId } from "../components/Cache";
+import type { Lobby } from "../utils/Types";
+import { getCacheBearerToken, getCurrentUserId } from "../utils/Cache";
 import { useEffect, useState } from "react";
+import { fetchApi } from "../utils/Api";
 
 export default function LobbyPage() {
   const { id } = useParams<{ id: string }>();
@@ -13,13 +14,7 @@ export default function LobbyPage() {
   useEffect(() => {
     if (!id || !token) return;
 
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/lobby/${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token,
-      },
-    })
+    fetchApi(`/api/lobby/${id}`, "GET")
       .then((res) => {
         if (!res.ok) {
           throw new Error(`Failed to fetch lobby (${res.status})`);
@@ -37,18 +32,11 @@ export default function LobbyPage() {
     if (!id || !token) return;
 
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/lobby/${id}/members`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token,
-          },
-        },
-      );
-
-      if (!res.ok) throw new Error(`Failed to leave lobby (${res.status})`);
+      const res = await fetchApi(`/api/lobby/${id}/members`, "DELETE");
+      if (!res.ok) {
+        alert(`Failed to leave lobby (${res.status})`);
+        return;
+      }
       navigate("/", { replace: true });
     } catch (err) {
       alert(err);
@@ -59,18 +47,15 @@ export default function LobbyPage() {
     if (!id || !token) return;
 
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/lobby/${id}/members/${userId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token,
-          },
-        },
+      const res = await fetchApi(
+        `/api/lobby/${id}/members/${userId}`,
+        "DELETE",
       );
 
-      if (!res.ok) throw new Error(`Failed to remove user (${res.status})`);
+      if (!res.ok) {
+        alert(`Failed to remove user (${res.status})`);
+        return;
+      }
 
       if (lobby) {
         setLobby({
