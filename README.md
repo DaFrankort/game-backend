@@ -60,7 +60,7 @@ All lobby endpoints require you to have a valid **bearer token**. You can get on
 - ``GET /api/lobby`` - Get an overview of all lobbies, with limited information about users.
 This endpoint is paginated, by default it returns the first 25 results of the first page. You can specify the page and page size by using query parameters, for example: ``/api/lobby?page=2&limit=30``.
 - ``POST /api/lobby`` - Create a new lobby, requires a body with the name for the lobby, using the following format: ``{ "name": "MyLobby" }``.
-- ``GET /api/lobby/{lobbyId}`` - Get information about a specific lobby.
+- ``GET /api/lobby/{lobbyId}`` - Get information about a specific lobby. Returns more detailed information about users in the lobby if the requester is a member of the lobby, otherwise it returns limited information about users in the lobby.
 - ``POST /api/lobby/{lobbyId}/members`` - Join a lobby, this will use your bearer token to determine which user to add. A user can only be added to a lobby by themselves.
 - ``DELETE /api/lobby/{lobbyId}/members`` - Leave a lobby, this will use your bearer token to determine which user to remove. A user can only leave a lobby they are a member of.
 - ``DELETE /api/lobby/{lobbyId}/members/{userId}`` - Remove a user from a lobby, the lobby owner can kick anyone, and users can kick themselves. This will use your bearer token to determine which user is trying to perform the action.
