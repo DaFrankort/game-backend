@@ -16,10 +16,15 @@ namespace Server.Middleware
             if (header != null && header.StartsWith("Bearer "))
             {
                 string token = header["Bearer ".Length..];
-                User user = userService.GetByToken(token);
-
-                if (user != null)
+                try
+                {
+                    User user = userService.GetByToken(token);
                     context.Items["User"] = user;
+                }
+                catch
+                {
+                    context.Items["User"] = null;
+                }
             }
 
             await _next(context);
