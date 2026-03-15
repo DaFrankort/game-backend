@@ -16,6 +16,7 @@ export interface Lobby {
 export interface User {
   id: string;
   name: string;
+  lobbyId: string | null;
 }
 
 export interface AuthResponse extends User {
