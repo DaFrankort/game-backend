@@ -23,6 +23,15 @@ namespace Server.Controllers
             return user is not null ? Ok(user) : NotFound();
         }
 
+        [HttpGet("me")]
+        [RequireAuth]
+        public IActionResult GetMe()
+        {
+            if (HttpContext.Items["User"] is not User user)
+                return Unauthorized();
+            return Ok(user);
+        }
+
         [HttpPost]
         public IActionResult Create([FromBody] CreateUserRequestDto dto)
         {
