@@ -19,9 +19,8 @@ public class LobbyService(UserService userService)
 
     public Lobby Create(Lobby lobby, User host)
     {
-        host.LobbyId = lobby.Id;
-        lobby.Members.Add(host);
         _lobbies.Add(lobby);
+        AddMember(lobby.Id, host.Id);
         return lobby;
     }
 
