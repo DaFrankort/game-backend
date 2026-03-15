@@ -43,11 +43,13 @@ namespace Server.Controllers
             return CreatedAtAction(nameof(Get), new { id = lobby.Id }, lobby);
         }
 
-        [HttpPost("join")]
-        public IActionResult Join([FromBody] JoinLobbyRequestDto dto)
+        [HttpPost("{lobbyId}/members")]
+        public IActionResult Join(int lobbyId)
         {
-            _service.AddUser(dto.LobbyId, dto.UserId);
-            Lobby lobby = _service.GetById(dto.LobbyId)!;
+            User? user = (User?)HttpContext.Items["User"];
+            if (user == null)
+                return Unauthorized();
+            Lobby lobby = _service.AddUser(lobbyId, user.Id);
             return Ok(lobby);
         }
 
