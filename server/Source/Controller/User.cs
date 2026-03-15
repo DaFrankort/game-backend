@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Server.Attributes;
 using Server.Models;
 using Server.Services;
+using Server.Utility;
 
 namespace Server.Controllers
 {
@@ -30,8 +31,7 @@ namespace Server.Controllers
         [RequireAuth]
         public IActionResult GetMe()
         {
-            if (HttpContext.Items["User"] is not User user)
-                return Unauthorized();
+            User user = HttpContextUtil.GetUser(HttpContext);
             return Ok(user);
         }
 

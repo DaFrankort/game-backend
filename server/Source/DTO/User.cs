@@ -10,8 +10,8 @@ public class CreateUserRequestDto
         ErrorMessage = "User name must be between 3 and 20 characters."
     )]
     [RegularExpression(
-        @"^[a-zA-Z0-9_-]+$",
-        ErrorMessage = "User name can only contain letters, numbers, underscores, and hyphens."
+        @"^[a-zA-Z0-9 _-]+$",
+        ErrorMessage = "User name can only contain letters, numbers, spaces, underscores, and hyphens."
     )]
     public string Name { get; set; } = "User";
 }

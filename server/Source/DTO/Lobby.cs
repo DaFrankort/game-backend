@@ -12,8 +12,8 @@ namespace Server.DTO
             ErrorMessage = "Lobby name must be between 3 and 20 characters."
         )]
         [RegularExpression(
-            @"^[a-zA-Z0-9_-]+$",
-            ErrorMessage = "User name can only contain letters, numbers, underscores, and hyphens."
+            @"^[a-zA-Z0-9 _-]+$",
+            ErrorMessage = "User name can only contain letters, numbers, spaces, underscores, and hyphens."
         )]
         public string Name { get; set; } = "Lobby";
     }
@@ -22,6 +22,7 @@ namespace Server.DTO
     {
         public string Id { get; set; } = lobby.Id;
         public string Name { get; set; } = lobby.Name;
+        public string HostUserName { get; set; } = lobby.Host.Name;
         public int MemberCount { get; set; } = lobby.Members.Count;
         public int MaxMembers { get; set; } = lobby.MaxMembers;
     }

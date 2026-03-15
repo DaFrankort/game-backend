@@ -62,4 +62,5 @@ This endpoint is paginated, by default it returns the first 25 results of the fi
 - ``POST /api/lobby`` - Create a new lobby, requires a body with the name for the lobby, using the following format: ``{ "name": "MyLobby" }``.
 - ``GET /api/lobby/{lobbyId}`` - Get information about a specific lobby.
 - ``POST /api/lobby/{lobbyId}/members`` - Join a lobby, this will use your bearer token to determine which user to add. A user can only be added to a lobby by themselves.
-- ``DELETE /api/lobby/{lobbyId}/members/{userId}`` - Remove a user from a lobby, this can be done by other users too (TODO - Allow only lobby-owners to kick anyone).
+- ``DELETE /api/lobby/{lobbyId}/members`` - Leave a lobby, this will use your bearer token to determine which user to remove. A user can only leave a lobby they are a member of.
+- ``DELETE /api/lobby/{lobbyId}/members/{userId}`` - Remove a user from a lobby, the lobby owner can kick anyone, and users can kick themselves. This will use your bearer token to determine which user is trying to perform the action.

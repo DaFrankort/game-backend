@@ -1,6 +1,7 @@
 export type LobbyList = {
   id: string;
   name: string;
+  hostUserName: string;
   memberCount: number;
   maxMembers: number;
 }[];
