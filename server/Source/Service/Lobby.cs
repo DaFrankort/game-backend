@@ -19,7 +19,7 @@ public class LobbyService(UserService userService)
         return lobby;
     }
 
-    public void AddUser(int lobbyId, int userId)
+    public Lobby AddUser(int lobbyId, int userId)
     {
         Lobby? lobby = GetById(lobbyId) ?? throw new LobbyNotFoundException(lobbyId);
         if (lobby.Users.Count >= lobby.MaxUsers)
@@ -32,6 +32,7 @@ public class LobbyService(UserService userService)
         user.LobbyId = lobbyId;
 
         lobby.Users.Add(user);
+        return lobby;
     }
 
     public void RemoveUser(int lobbyId, int userId)
