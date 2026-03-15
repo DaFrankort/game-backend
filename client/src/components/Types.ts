@@ -9,6 +9,7 @@ export type LobbyList = {
 export interface Lobby {
   id: string;
   name: string;
+  host: User;
   members: User[];
   maxMembers: number;
 }
