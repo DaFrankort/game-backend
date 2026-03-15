@@ -17,7 +17,7 @@ public class UserService
     public User GetById(string id)
     {
         User user =
-            _users.FirstOrDefault(lobby => lobby.Id == id) ?? throw new UserNotFoundException(id);
+            _users.FirstOrDefault(user => user.Id == id) ?? throw new UserNotFoundException(id);
         return user;
     }
 
@@ -25,7 +25,7 @@ public class UserService
     {
         User user =
             _users.FirstOrDefault(user => user.AuthToken == token)
-            ?? throw new UserNotFoundException(token);
+            ?? throw new UserTokenNotFoundException(token);
         return user;
     }
 
