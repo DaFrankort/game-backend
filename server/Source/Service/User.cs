@@ -6,12 +6,11 @@ using Server.Models;
 public class UserService()
 {
     private readonly List<User> _users = [];
-
-    public IEnumerable<User> GetAll() => _users;
+    private readonly Lock _lock = new();
 
     public IEnumerable<User> GetPaged(int page, int limit)
     {
-        return _users.Skip((page - 1) * limit).Take(limit);
+        return _users.Skip((page - 1) * limit).Take(limit).ToList();
     }
 
     public User GetById(string id)
@@ -33,7 +32,12 @@ public class UserService()
     {
         string token = GenerateToken();
         User user = new(name, token);
-        _users.Add(user);
+
+        lock (_lock)
+        {
+            _users.Add(user);
+        }
+
         return user;
     }
 
@@ -41,7 +45,12 @@ public class UserService()
     {
         if (user.LobbyId != null)
             throw new UserCanNotBeDeleted("User is still in a lobby.");
-        _users.Remove(user);
+
+        lock (_lock)
+        {
+            _users.Remove(user);
+        }
+
         return user;
     }
 
