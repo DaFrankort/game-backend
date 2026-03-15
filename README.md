@@ -53,10 +53,12 @@ The backend has the following endpoints:
 - ``GET /api/user/{userId}`` - Get specific information from a user.
 - ``GET /api/user/me`` - Using your bearer token as context, will return your associated user-profile.
 - ``GET /api/user`` - Get an overview of all users.
+This endpoint is paginated, by default it returns the first 25 results of the first page. You can specify the page and page size by using query parameters, for example: ``/api/user?page=2&limit=25``.
 
 ## Lobbies
 All lobby endpoints require you to have a valid **bearer token**. You can get one by creating a user.
 - ``GET /api/lobby`` - Get an overview of all lobbies, with limited information about users.
+This endpoint is paginated, by default it returns the first 25 results of the first page. You can specify the page and page size by using query parameters, for example: ``/api/lobby?page=2&limit=30``.
 - ``POST /api/lobby`` - Create a new lobby, requires a body with the name for the lobby, using the following format: ``{ "name": "MyLobby" }``.
 - ``GET /api/lobby/{lobbyId}`` - Get information about a specific lobby.
 - ``POST /api/lobby/{lobbyId}/members`` - Join a lobby, this will use your bearer token to determine which user to add. A user can only be added to a lobby by themselves.
