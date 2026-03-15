@@ -1,9 +1,28 @@
 .lobby-list {
     padding: 0;
+    margin: 0;
+    list-style: none;
+    width: 100%;
 }
 
 .lobby-item {
     display: flex;
-    align-items: baseline;
     justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+}
+
+.lobby-item.header {
+    font-weight: bold;
+    background-color: #f5f5f5;
+}
+
+.lobby-item > * {
+    flex: 1;
+    text-align: left;
+}
+
+.lobby-item > p {
+    text-align: right;
+    margin: 0;
 }

@@ -34,19 +34,31 @@ export default function LobbyListComponent() {
   }
 
   return (
-    <ul className="lobby-list">
-      {Array.isArray(lobbies) && lobbies.length > 0 ? (
-        lobbies.map((lobby) => (
-          <li key={lobby.id} className="lobby-item">
-            <b>{lobby.name}</b>
-            <p>
-              {lobby.memberCount}/{lobby.maxMembers} Users
-            </p>
-          </li>
-        ))
-      ) : (
-        <li>No lobbies available</li>
-      )}
-    </ul>
+    <table className="lobby-list">
+      <thead>
+        <tr className="lobby-item">
+          <th>Lobby Name</th>
+          <th>Host</th>
+          <th>Members</th>
+        </tr>
+      </thead>
+      <tbody>
+        {Array.isArray(lobbies) && lobbies.length > 0 ? (
+          lobbies.map((lobby) => (
+            <tr key={lobby.id} className="lobby-item">
+              <td>{lobby.name}</td>
+              <td>{lobby.hostUserName}</td>
+              <td>
+                {lobby.memberCount}/{lobby.maxMembers}
+              </td>
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan={3}>No lobbies available</td>
+          </tr>
+        )}
+      </tbody>
+    </table>
   );
 }
