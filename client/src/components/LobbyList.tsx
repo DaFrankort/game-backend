@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import type { LobbyList } from "./Types";
 import { getCacheBearerToken, isLoggedIn } from "./Cache";
+import "./LobbyList.css";
 
 export default function LobbyListComponent() {
   const [lobbies, setLobbies] = useState<LobbyList>([]);
@@ -33,11 +34,14 @@ export default function LobbyListComponent() {
   }
 
   return (
-    <ul>
+    <ul className="lobby-list">
       {Array.isArray(lobbies) && lobbies.length > 0 ? (
         lobbies.map((lobby) => (
-          <li key={lobby.id}>
-            {lobby.name} - Users: {lobby.userCount}
+          <li key={lobby.id} className="lobby-item">
+            <b>{lobby.name}</b>
+            <p>
+              {lobby.memberCount}/{lobby.maxMembers} Users
+            </p>
           </li>
         ))
       ) : (

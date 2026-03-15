@@ -1,0 +1,9 @@
+.lobby-list {
+    padding: 0;
+}
+
+.lobby-item {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}
