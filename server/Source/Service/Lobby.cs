@@ -6,13 +6,12 @@ using Server.Models;
 public class LobbyService(UserService userService)
 {
     private readonly List<Lobby> _lobbies = [];
+    private readonly object _lock = new();
     private readonly UserService _userService = userService;
-
-    public IEnumerable<Lobby> GetAll() => _lobbies;
 
     public IEnumerable<Lobby> GetPaged(int page, int limit)
     {
-        return _lobbies.Skip((page - 1) * limit).Take(limit);
+        return _lobbies.Skip((page - 1) * limit).Take(limit).ToList();
     }
 
     public Lobby GetById(string id)
@@ -28,8 +27,12 @@ public class LobbyService(UserService userService)
         if (host.LobbyId != null)
             throw new UserInLobbyException(host.Id);
 
-        _lobbies.Add(lobby);
-        AddMember(lobby.Id, host.Id);
+        lock (_lock)
+        {
+            _lobbies.Add(lobby);
+            AddMember(lobby.Id, host.Id);
+        }
+
         return lobby;
     }
 
@@ -49,22 +52,28 @@ public class LobbyService(UserService userService)
         if (lobby.Host.Id != invoker.Id)
             throw new LobbyCantDeleteException();
 
-        return DeleteLobby(lobby);
+        lock (_lock)
+        {
+            return DeleteLobby(lobby);
+        }
     }
 
     public Lobby AddMember(string lobbyId, string userId)
     {
         Lobby lobby = GetById(lobbyId) ?? throw new LobbyNotFoundException(lobbyId);
-        if (lobby.Members.Count >= lobby.MaxMembers)
-            throw new LobbyFullException();
-
         User user = _userService.GetById(userId) ?? throw new UserNotFoundException(userId);
 
-        if (user.LobbyId != null)
-            throw new UserInLobbyException(userId);
-        user.LobbyId = lobbyId;
+        lock (_lock)
+        {
+            if (lobby.Members.Count >= lobby.MaxMembers)
+                throw new LobbyFullException();
+            if (user.LobbyId != null)
+                throw new UserInLobbyException(userId);
 
-        lobby.Members.Add(user);
+            user.LobbyId = lobbyId;
+            lobby.Members.Add(user);
+        }
+
         return lobby;
     }
 
@@ -73,24 +82,22 @@ public class LobbyService(UserService userService)
         Lobby lobby = GetById(lobbyId) ?? throw new LobbyNotFoundException(lobbyId);
         User target = _userService.GetById(userId) ?? throw new UserNotFoundException(userId);
 
-        if ((invoker.Id != lobby.Host.Id) && (target.Id != invoker.Id))
-            throw new LobbyCantRemoveUserException();
-
-        if (target.LobbyId == null)
-            throw new UserNotInLobbyException(userId);
-        target.LobbyId = null;
-
-        lobby.Members.RemoveAll(user => user.Id == userId);
-
-        if (target.Id == lobby.Host.Id)
+        lock (_lock)
         {
-            if (lobby.Members.Count > 0)
+            if ((invoker.Id != lobby.Host.Id) && (target.Id != invoker.Id))
+                throw new LobbyCantRemoveUserException();
+            if (target.LobbyId == null)
+                throw new UserNotInLobbyException(userId);
+
+            target.LobbyId = null;
+            lobby.Members.RemoveAll(user => user.Id == userId);
+
+            if (target.Id == lobby.Host.Id)
             {
-                lobby.Host = lobby.Members[0];
-            }
-            else
-            {
-                DeleteLobby(lobby);
+                if (lobby.Members.Count > 0)
+                    lobby.Host = lobby.Members[0];
+                else
+                    DeleteLobby(lobby);
             }
         }
 
