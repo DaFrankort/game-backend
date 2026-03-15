@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import type { Lobby } from "../components/Types";
 import { getCacheBearerToken } from "../components/Cache";
 import { useEffect, useState } from "react";
@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 export default function LobbyPage() {
     const { id } = useParams<{ id: string }>();
     const [lobby, setLobby] = useState<Lobby | null>(null);
+    const navigate = useNavigate();
     const token = getCacheBearerToken();
 
     useEffect(() => {
@@ -25,21 +26,45 @@ export default function LobbyPage() {
                 return res.json();
             })
             .then((data: Lobby) => setLobby(data))
-            .catch((err) => alert(err));
+            .catch(() => {
+                alert("Could not find that lobby, rerouting!");
+                navigate("/", { replace: true });
+            });
 
-    }, [id, token]);
+    }, [id, navigate, token]);
+
+    const leaveLobby = async () => {
+        if (!id || !token) return;
+
+        try {
+            const res = await fetch(
+                `${import.meta.env.VITE_BACKEND_URL}/api/lobby/${id}/members`,
+                {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: token,
+                    },
+                }
+            );
+
+            if (!res.ok) throw new Error(`Failed to leave lobby (${res.status})`);
+            navigate("/", { replace: true });
+        } catch (err) {
+            alert(err);
+        }
+    };
 
     if (!lobby) {
         return <p>Loading lobby...</p>;
     }
 
-    console.log(lobby);
-
-
     return (
         <div>
             <h1>{lobby.name}</h1>
-            <b>Hosted by: {lobby.host.name}</b>
+            <button onClick={leaveLobby} className="leave-lobby-button">
+                Leave Lobby
+            </button>
             {lobby.members && (
                 <>
                     <h2>Members ({lobby.members?.length ?? 0}/{lobby.maxMembers})</h2>
