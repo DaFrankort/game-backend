@@ -53,20 +53,20 @@ export default function Login() {
       </div>
     );
   } else {
-  return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Enter your name"
-        required
-      />
-      <button type="submit" disabled={loading}>
-        {loading ? "Logging in..." : "Login"}
-      </button>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-    </form>
-  );
-}
+    return (
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Enter your name"
+          required
+        />
+        <button type="submit" disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
+        {error && <p style={{ color: "red" }}>{error}</p>}
+      </form>
+    );
+  }
 }
