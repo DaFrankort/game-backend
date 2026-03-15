@@ -16,15 +16,7 @@ namespace Server.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var summaries = _service
-                .GetAll()
-                .Select(l => new LobbySummaryDto
-                {
-                    Id = l.Id,
-                    Name = l.Name,
-                    UserCount = l.Users.Count,
-                });
-
+            var summaries = _service.GetAll().Select(l => new LobbySummaryDto(l));
             return Ok(summaries);
         }
 
@@ -49,14 +41,14 @@ namespace Server.Controllers
             User? user = (User?)HttpContext.Items["User"];
             if (user == null)
                 return Unauthorized();
-            Lobby lobby = _service.AddUser(lobbyId, user.Id);
+            Lobby lobby = _service.AddMember(lobbyId, user.Id);
             return Ok(lobby);
         }
 
         [HttpDelete("{lobbyId}/members/{userId}")]
         public IActionResult Leave(int lobbyId, int userId)
         {
-            Lobby lobby = _service.RemoveUser(lobbyId, userId);
+            Lobby lobby = _service.RemoveMember(lobbyId, userId);
             return Ok(lobby);
         }
     }

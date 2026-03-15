@@ -1,3 +1,5 @@
+using Server.Models;
+
 namespace Server.DTO
 {
     public class CreateLobbyRequestDto
@@ -5,10 +7,11 @@ namespace Server.DTO
         public string Name { get; set; } = "Lobby";
     }
 
-    public class LobbySummaryDto
+    public class LobbySummaryDto(Lobby lobby)
     {
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public int UserCount { get; set; }
+        public int Id { get; set; } = lobby.Id;
+        public string Name { get; set; } = lobby.Name;
+        public int MemberCount { get; set; } = lobby.Members.Count;
+        public int MaxMembers { get; set; } = lobby.MaxMembers;
     }
 }

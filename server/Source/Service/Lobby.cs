@@ -19,10 +19,10 @@ public class LobbyService(UserService userService)
         return lobby;
     }
 
-    public Lobby AddUser(int lobbyId, int userId)
+    public Lobby AddMember(int lobbyId, int userId)
     {
         Lobby? lobby = GetById(lobbyId) ?? throw new LobbyNotFoundException(lobbyId);
-        if (lobby.Users.Count >= lobby.MaxUsers)
+        if (lobby.Members.Count >= lobby.MaxMembers)
             throw new LobbyFullException();
 
         User? user = _userService.GetById(userId) ?? throw new UserNotFoundException(userId);
@@ -31,11 +31,11 @@ public class LobbyService(UserService userService)
             throw new UserInLobbyException(userId);
         user.LobbyId = lobbyId;
 
-        lobby.Users.Add(user);
+        lobby.Members.Add(user);
         return lobby;
     }
 
-    public Lobby RemoveUser(int lobbyId, int userId)
+    public Lobby RemoveMember(int lobbyId, int userId)
     {
         Lobby? lobby = GetById(lobbyId) ?? throw new LobbyNotFoundException(lobbyId);
         User? user = _userService.GetById(userId) ?? throw new UserNotFoundException(userId);
@@ -44,7 +44,7 @@ public class LobbyService(UserService userService)
             throw new UserNotInLobbyException(userId);
         user.LobbyId = null;
 
-        lobby.Users.RemoveAll(u => u.Id == userId);
+        lobby.Members.RemoveAll(u => u.Id == userId);
         return lobby;
     }
 }
